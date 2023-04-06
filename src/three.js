@@ -7,8 +7,10 @@ const SIZE = VIDEO_SIZE[STATE.camera.sizeOption]
 
 export class Three {
   constructor() {
-    this.camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 1000000)
+    this.camera = new THREE.PerspectiveCamera(75, SIZE.width / SIZE.height, 0.1, 1000)
     this.camera.position.z = 1
+
+    
 
     this.scene = new THREE.Scene()
 
@@ -25,7 +27,10 @@ export class Three {
     this.scene.add(directionalLight)
 
     this.renderer = new THREE.WebGLRenderer({ antialias: true })
-    this.renderer.setSize(window.innerWidth, window.innerHeight)
+    // set quality
+    this.renderer.setSize(SIZE.width, SIZE.height)
+    this.renderer.setPixelRatio(window.devicePixelRatio)
+
     this.renderer.setAnimationLoop(this.animation.bind(this))
     document.getElementById('threejs-wrapper').innerHTML = ''
     document.getElementById('threejs-wrapper').appendChild(this.renderer.domElement)
@@ -64,6 +69,9 @@ export class Three {
       },
       (xhr) => {
         console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
+        // position the camera
+        this.camera.position.z = 2 /* j'ai changé ça */
+
       },
       (error) => {
         console.log('An error happened', error)
@@ -119,10 +127,11 @@ export class Three {
       // Head orientation
       const orientation = this.computeFaceOrientation(face)
       const head = this.model.getObjectByName('Head_02')
-      console.log(head)
+      //console.log(head)
       head.rotation.x = this.defaultHeadRotation.x + orientation.x
       head.rotation.y = this.defaultHeadRotation.y + orientation.y
       head.rotation.z = this.defaultHeadRotation.z + orientation.z
+      
     }
   }
 
