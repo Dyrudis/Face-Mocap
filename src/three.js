@@ -1,7 +1,9 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { VIDEO_SIZE, STATE } from './params'
+import { copyModel } from '@tensorflow/tfjs-core/dist/io/model_management'
 
 const SIZE = VIDEO_SIZE[STATE.camera.sizeOption]
 
@@ -9,8 +11,6 @@ export class Three {
   constructor() {
     this.camera = new THREE.PerspectiveCamera(75, SIZE.width / SIZE.height, 0.1, 1000)
     this.camera.position.z = 1
-
-    
 
     this.scene = new THREE.Scene()
 
@@ -20,10 +20,11 @@ export class Three {
     this.cube = new THREE.Mesh(this.geometry, this.material)
     this.scene.add(this.cube)
 
-    const light = new THREE.AmbientLight(0xffffff, 1)
+    const light = new THREE.AmbientLight(0xffffff, .25)
     this.scene.add(light)
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1)
+    directionalLight.position.set(5, 10, 10)
     this.scene.add(directionalLight)
 
     this.renderer = new THREE.WebGLRenderer({ antialias: true })
@@ -41,8 +42,10 @@ export class Three {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement)
     this.controls.target.set(0, 0, 0)
 
-    this.importGLTFModelWithRigging('../zophrac')
+    this.importGLTFModelWithRigging('../Oldman/Oldman.gltf')
     this.defaultHeadRotation = { x: 0, y: 0, z: 0 }
+
+    this.clock = new THREE.Clock()
   }
 
   animation(time) {
@@ -57,13 +60,14 @@ export class Three {
   /**
    * Import a glTF Separate (.glTF + .bin + textures) from Blender (add the textures to the model) and return the model.
    */
-  importGLTFModelWithRigging(folderPath) {
+  importGLTFModelWithRigging(path) {
     const loader = new GLTFLoader()
     loader.load(
-      `${folderPath}/scene.gltf`,
+      path,
       (gltf) => {
         this.scene.add(gltf.scene)
         this.model = gltf.scene
+        console.log(this.model)
 
         this.saveDefaultRotation()
       },
@@ -71,7 +75,26 @@ export class Three {
         console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
         // position the camera
         this.camera.position.z = 2 /* j'ai changé ça */
+      },
+      (error) => {
+        console.log('An error happened', error)
+      }
+    )
+  }
 
+  importFBXModel(path) {
+    const loader = new FBXLoader()
+    loader.load(
+      path,
+      (fbx) => {
+        this.scene.add(fbx)
+        this.model = fbx
+        console.log(this.model)
+      },
+      (xhr) => {
+        console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
+        // position the camera
+        this.camera.position.z = 2 /* j'ai changé ça */
       },
       (error) => {
         console.log('An error happened', error)
@@ -126,12 +149,15 @@ export class Three {
 
       // Head orientation
       const orientation = this.computeFaceOrientation(face)
-      const head = this.model.getObjectByName('Head_02')
-      //console.log(head)
+      const head = this.model.getObjectByName('head')
       head.rotation.x = this.defaultHeadRotation.x + orientation.x
       head.rotation.y = this.defaultHeadRotation.y + orientation.y
       head.rotation.z = this.defaultHeadRotation.z + orientation.z
-      
+
+      // jaw
+      const jaw = this.model.getObjectByName('jaw')
+      jaw.position.y = (face.keypoints[13].y - face.keypoints[14].y) / 300
+      jaw.position.x = (face.keypoints[13].x - face.keypoints[14].x) / 75
     }
   }
 
@@ -145,19 +171,25 @@ export class Three {
     let bottomKeyPoint = face.keypoints[152]
 
     return {
-      x: (leftKeyPoint.z - rightKeyPoint.z) / 250,
-      y: (topKeyPoint.z - bottomKeyPoint.z) / 250,
-      z: (topKeyPoint.x - bottomKeyPoint.x) / 250,
+      x: (topKeyPoint.z - bottomKeyPoint.z) / 250,
+      y: (leftKeyPoint.z - rightKeyPoint.z) / 250,
+      z: - (topKeyPoint.x - bottomKeyPoint.x) / 250,
     }
   }
 
   saveDefaultRotation() {
     // Head
-    const head = this.model.getObjectByName('Head_02')
+    const head = this.model.getObjectByName('head')
     this.defaultHeadRotation = {
       x: head.rotation.x,
       y: head.rotation.y,
       z: head.rotation.z,
     }
+    /* const lipDown = this.model.getObjectByName('Lip_Down')
+    this.defaultLipDownPosition = {
+      x: lipDown.position.x,
+      y: lipDown.position.y,
+      z: lipDown.position.z,
+    } */
   }
 }
