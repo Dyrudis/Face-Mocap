@@ -110,7 +110,6 @@ async function renderResult() {
   // which shouldn't be rendered.
   if (faces && faces.length > 0 && !STATE.isModelChanged) {
     camera.drawResults(faces, STATE.modelConfig.triangulateMesh, STATE.modelConfig.boundingBox)
-    three.drawFaceBoxes(faces);
     three.animateModel(faces[0]);
   }
 }

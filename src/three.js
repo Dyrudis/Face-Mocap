@@ -14,12 +14,6 @@ export class Three {
 
     this.scene = new THREE.Scene()
 
-    this.geometry = new THREE.BoxGeometry(0.2, 0.2, 0.2)
-    this.material = new THREE.MeshPhysicalMaterial({ color: 0x44aa88 })
-
-    this.cube = new THREE.Mesh(this.geometry, this.material)
-    this.scene.add(this.cube)
-
     const light = new THREE.AmbientLight(0xffffff, .25)
     this.scene.add(light)
 
@@ -50,9 +44,6 @@ export class Three {
   }
 
   animation(time) {
-    this.cube.rotation.x = time / 2000
-    this.cube.rotation.y = time / 1000
-
     this.controls.update()
 
     this.renderer.render(this.scene, this.camera)
@@ -157,8 +148,8 @@ export class Three {
       let bottomKeyPoint = face.keypoints[164];
       let x = (topKeyPoint.x + bottomKeyPoint.x) / 2;
       let y = (topKeyPoint.y + bottomKeyPoint.y) / 2;
-      this.model.position.set( -(x / SIZE.width - 0.5) * 2 + 0.2, - (y / SIZE.height - 0.5) * 2, 0);
-
+      this.model.position.set( -(x / SIZE.width - 0.5) * 4 + 0.1, - (y / SIZE.height - 0.5) * 2 - 0.3, 0);
+/* 
       let topKeyPointPosition = this.model.worldToLocal(
         new THREE.Vector3(
           (topKeyPoint.x / SIZE.width - 0.5) * 2,
@@ -172,10 +163,9 @@ export class Three {
           -(bottomKeyPoint.y / SIZE.height - 0.5) * 2,
           0
         )
-      );
-      let scale = topKeyPointPosition.distanceTo(bottomKeyPointPosition) * 9;
+      ); */
+      let scale = 0 + Math.abs(bottomKeyPoint.y - topKeyPoint.y) / 20;
       this.model.scale.set(scale, scale, scale); // -----------------//
-      
       
 
 

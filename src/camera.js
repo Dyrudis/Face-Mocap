@@ -68,6 +68,5 @@ export class Camera {
 
   drawResults(faces, triangulateMesh, boundingBox) {
     drawResults(this.ctx, faces, triangulateMesh, boundingBox);
-    drawResults(this.ctx2, faces, triangulateMesh, boundingBox);
   }
 }
