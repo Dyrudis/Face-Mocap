@@ -17,7 +17,7 @@ export async function setupDatGui(urlParams) {
   sizeController.onChange(_ => {
     params.STATE.isSizeOptionChanged = true;
   });
-  cameraFolder.open();
+  // cameraFolder.open();
 
   return setupModelFolder(gui, urlParams);
 }
@@ -62,13 +62,13 @@ async function setupModelFolder(gui, urlParams) {
 
   showModelConfigs(modelFolder);
 
-  modelFolder.open();
+  // modelFolder.open();
 
   const backendFolder = gui.addFolder('Backend');
 
   showBackendConfigs(backendFolder);
 
-  backendFolder.open();
+  //backendFolder.open();
 
   return gui;
 }

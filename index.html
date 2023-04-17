@@ -22,7 +22,7 @@
           <div class="canvas-wrapper">
               <canvas id="output"></canvas>
               <video id="video" playsinline
-                style="-webkit-transform: scaleX(-1); transform: scaleX(-1); display: none; width: auto; height: auto"></video>
+                style="display: none; width: auto; height: auto"></video>
           </div>
         </div>
       </div>
@@ -30,7 +30,12 @@
         <div class="content-box">
           <h1>3D Model Mocap AI ehanced :</h1>
           <p></p>
-          <div id="threejs-wrapper"></div>
+          <div class="canvas-wrapper" id="reverse">
+              <canvas id="output2" width="640" height="480" style="position: absolute;"></canvas>
+              <video id="video2" playsinline  
+                style="-webkit-transform: scaleX(-1, 1); transform: scaleX(-1, 1); display: none; width: auto; height: auto"></video>
+          </div>
+          <div id="threejs-wrapper" style="position: absolute;"></div>
         </div>
       </div>
     </div>

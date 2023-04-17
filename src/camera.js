@@ -4,8 +4,11 @@ import {drawResults, isMobile} from './util';
 export class Camera {
   constructor() {
     this.video = document.getElementById('video');
+    this.video2 = document.getElementById('video2');
     this.canvas = document.getElementById('output');
+    this.canvas2 = document.getElementById('output2');
     this.ctx = this.canvas.getContext('2d');
+    this.ctx2 = this.canvas2.getContext('2d');
   }
 
   /**
@@ -59,11 +62,12 @@ export class Camera {
   }
 
   drawCtx() {
-    this.ctx.drawImage(
-        this.video, 0, 0, this.video.videoWidth, this.video.videoHeight);
+    this.ctx.drawImage(this.video, 0, 0, this.video.videoWidth, this.video.videoHeight);
+    this.ctx2.drawImage(this.video, 0, 0, this.video.videoWidth, this.video.videoHeight);
   }
 
   drawResults(faces, triangulateMesh, boundingBox) {
     drawResults(this.ctx, faces, triangulateMesh, boundingBox);
+    drawResults(this.ctx2, faces, triangulateMesh, boundingBox);
   }
 }
