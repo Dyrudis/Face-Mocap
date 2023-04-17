@@ -42,7 +42,7 @@ export class Three {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement)
     this.controls.target.set(0, 0, 0)
 
-    this.importGLTFModelWithRigging('../Oldman/Oldman.gltf')
+    this.importGLTFModelWithRigging('../Oldman 2/Oldman.glb')
     this.defaultHeadRotation = { x: 0, y: 0, z: 0 }
 
     this.clock = new THREE.Clock()
@@ -146,18 +146,28 @@ export class Three {
   animateModel(face) {
     if (this.model) {
       const keypoints = face.keypoints.map((keypoint) => [keypoint.x, keypoint.y])
+      const box = face.box
 
       // Head orientation
       const orientation = this.computeFaceOrientation(face)
-      const head = this.model.getObjectByName('head')
+      const head = this.model.getObjectByName('cabeza')
       head.rotation.x = this.defaultHeadRotation.x + orientation.x
       head.rotation.y = this.defaultHeadRotation.y + orientation.y
       head.rotation.z = this.defaultHeadRotation.z + orientation.z
 
-      // jaw
-      const jaw = this.model.getObjectByName('jaw')
-      jaw.position.y = (face.keypoints[13].y - face.keypoints[14].y) / 300
-      jaw.position.x = (face.keypoints[13].x - face.keypoints[14].x) / 75
+      // jaw WIP
+      const jaw = this.model.getObjectByName('mandibula')
+      jaw.rotation.x = this.defaultJawRotation.x + (face.keypoints[13].y - face.keypoints[14].y) / 100
+
+      // left eyebrow
+      const leftEyebrow = this.model.getObjectByName('ceja_izq')
+      leftEyebrow.rotation.z = this.defaultLeftEyebrowRotation.z + (10 * (0.16 + ((face.keypoints[107].y - face.keypoints[245].y) / box.height)))
+      console.log(10 * (0.16 + ((face.keypoints[107].y - face.keypoints[245].y) / box.height)))
+      //console.log(box.height);
+
+      // right eyebrow
+      const rightEyebrow = this.model.getObjectByName('ceja_der')
+      rightEyebrow.rotation.z = this.defaultRightEyebrowRotation.z - (10 * (0.16 + ((face.keypoints[336].y - face.keypoints[465].y) / box.height)))
     }
   }
 
@@ -165,31 +175,43 @@ export class Three {
    * Compute the orientation of the face and return x, y and z rotation.
    */
   computeFaceOrientation(face) {
-    let leftKeyPoint = face.keypoints[234]
-    let rightKeyPoint = face.keypoints[454]
-    let topKeyPoint = face.keypoints[10]
-    let bottomKeyPoint = face.keypoints[152]
+    let leftKeyPoint = face.keypoints[187]
+    let rightKeyPoint = face.keypoints[411]
+    let topKeyPoint = face.keypoints[197]
+    let bottomKeyPoint = face.keypoints[164]
 
     return {
-      x: (topKeyPoint.z - bottomKeyPoint.z) / 250,
-      y: (leftKeyPoint.z - rightKeyPoint.z) / 250,
-      z: - (topKeyPoint.x - bottomKeyPoint.x) / 250,
+      x: - (topKeyPoint.z - bottomKeyPoint.z) / 100,
+      y: - (leftKeyPoint.z - rightKeyPoint.z) / 250,
+      z: - (topKeyPoint.x - bottomKeyPoint.x) / 100,
     }
   }
 
   saveDefaultRotation() {
     // Head
-    const head = this.model.getObjectByName('head')
+    const head = this.model.getObjectByName('cabeza')
     this.defaultHeadRotation = {
       x: head.rotation.x,
       y: head.rotation.y,
       z: head.rotation.z,
     }
-    /* const lipDown = this.model.getObjectByName('Lip_Down')
-    this.defaultLipDownPosition = {
-      x: lipDown.position.x,
-      y: lipDown.position.y,
-      z: lipDown.position.z,
-    } */
+    const jaw = this.model.getObjectByName('mandibula')
+    this.defaultJawRotation = {
+      x: jaw.rotation.x,
+      y: jaw.rotation.y,
+      z: jaw.rotation.z,
+    }
+    const leftEyebrow = this.model.getObjectByName('ceja_izq')
+    this.defaultLeftEyebrowRotation = {
+      x: leftEyebrow.rotation.x,
+      y: leftEyebrow.rotation.y,
+      z: leftEyebrow.rotation.z,
+    }
+    const rightEyebrow = this.model.getObjectByName('ceja_der')
+    this.defaultRightEyebrowRotation = {
+      x: rightEyebrow.rotation.x,
+      y: rightEyebrow.rotation.y,
+      z: rightEyebrow.rotation.z,
+    }
   }
 }
