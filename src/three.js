@@ -67,7 +67,7 @@ export class Three {
       (xhr) => {
         console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
         // position the camera
-        this.camera.position.z = 2 
+        this.camera.position.z = 2
       },
       (error) => {
         console.log('An error happened', error)
@@ -138,15 +138,14 @@ export class Three {
 
   animateModel(face) {
     if (this.model) {
-      const keypoints = face.keypoints.map((keypoint) => [keypoint.x, keypoint.y])
       const box = face.box
 
-      let topKeyPoint = face.keypoints[197];
-      let bottomKeyPoint = face.keypoints[164];
-      let x = (topKeyPoint.x + bottomKeyPoint.x) / 2;
-      let y = (topKeyPoint.y + bottomKeyPoint.y) / 2;
-      this.model.position.set( -(x / SIZE.width - 0.5) * 4 + 0.3, - (y / SIZE.height - 0.5) * 2 - 2, -10);
-/* 
+      let topKeyPoint = face.keypoints[197]
+      let bottomKeyPoint = face.keypoints[164]
+      let x = box.xMin + (box.xMax - box.xMin) / 2
+      let y = box.yMin + (box.yMax - box.yMin) / 2
+      this.model.position.set(-(x / SIZE.width) * 10 + 15, -(y / SIZE.height) * 7 + 5, -10)
+      /* 
       let topKeyPointPosition = this.model.worldToLocal(
         new THREE.Vector3(
           (topKeyPoint.x / SIZE.width - 0.5) * 2,
@@ -161,18 +160,17 @@ export class Three {
           0
         )
       ); */
-      let scale = 0 + Math.abs(bottomKeyPoint.y - topKeyPoint.y) / 20;
-      let scaler = 6;
-      this.model.scale.set(scale * scaler, scale * scaler, scale * scaler);
-      
-      
+      let scale = 2 + ((box.xMax - box.xMin) + (box.yMax - box.yMin)) / 75
+      let scaler = 1
+      this.model.scale.set(scale * scaler, scale * scaler, scale * scaler)
 
+      console.log(scale)
       // Head orientation
-      const orientation = this.computeFaceOrientation(face);
-      const head = this.model.getObjectByName("cabeza");
-      head.rotation.x = this.defaultHeadRotation.x + orientation.x * 1.75;
-      head.rotation.y = this.defaultHeadRotation.y + orientation.y * 2.25;
-      head.rotation.z = this.defaultHeadRotation.z + orientation.z;
+      const orientation = this.computeFaceOrientation(face)
+      const head = this.model.getObjectByName('cabeza')
+      head.rotation.x = this.defaultHeadRotation.x + orientation.x
+      head.rotation.y = this.defaultHeadRotation.y + orientation.y
+      head.rotation.z = this.defaultHeadRotation.z + orientation.z
 
       // jaw WIP
       const jaw = this.model.getObjectByName('mandibula')
