@@ -67,7 +67,7 @@ export class Three {
       (xhr) => {
         console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
         // position the camera
-        this.camera.position.z = 2 /* j'ai changé ça */
+        this.camera.position.z = 2 
       },
       (error) => {
         console.log('An error happened', error)
@@ -87,7 +87,7 @@ export class Three {
       (xhr) => {
         console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
         // position the camera
-        this.camera.position.z = 2 /* j'ai changé ça */
+        this.camera.position.z = 2
       },
       (error) => {
         console.log('An error happened', error)
@@ -148,7 +148,7 @@ export class Three {
       let bottomKeyPoint = face.keypoints[164];
       let x = (topKeyPoint.x + bottomKeyPoint.x) / 2;
       let y = (topKeyPoint.y + bottomKeyPoint.y) / 2;
-      this.model.position.set( -(x / SIZE.width - 0.5) * 4 + 0.1, - (y / SIZE.height - 0.5) * 2 - 0.3, 0);
+      this.model.position.set( -(x / SIZE.width - 0.5) * 4 + 0.3, - (y / SIZE.height - 0.5) * 2 - 2, -10);
 /* 
       let topKeyPointPosition = this.model.worldToLocal(
         new THREE.Vector3(
@@ -165,16 +165,16 @@ export class Three {
         )
       ); */
       let scale = 0 + Math.abs(bottomKeyPoint.y - topKeyPoint.y) / 20;
-      this.model.scale.set(scale, scale, scale); // -----------------//
+      let scaler = 6;
+      this.model.scale.set(scale * scaler, scale * scaler, scale * scaler);
       
-
-
+      
 
       // Head orientation
       const orientation = this.computeFaceOrientation(face);
       const head = this.model.getObjectByName("cabeza");
-      head.rotation.x = this.defaultHeadRotation.x + orientation.x;
-      head.rotation.y = this.defaultHeadRotation.y + orientation.y;
+      head.rotation.x = this.defaultHeadRotation.x + orientation.x * 1.75;
+      head.rotation.y = this.defaultHeadRotation.y + orientation.y * 2.25;
       head.rotation.z = this.defaultHeadRotation.z + orientation.z;
 
       // jaw WIP
