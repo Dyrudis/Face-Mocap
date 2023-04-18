@@ -14,7 +14,7 @@ export class Three {
 
     this.scene = new THREE.Scene()
 
-    const light = new THREE.AmbientLight(0xffffff, .25)
+    const light = new THREE.AmbientLight(0xffffff, 0.25)
     this.scene.add(light)
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1)
@@ -25,7 +25,7 @@ export class Three {
     // set quality
     this.renderer.setSize(SIZE.width, SIZE.height)
     this.renderer.setPixelRatio(window.devicePixelRatio)
-    this.renderer.setClearColor(0x000000, 0);
+    this.renderer.setClearColor(0x000000, 0)
 
     this.renderer.setAnimationLoop(this.animation.bind(this))
     document.getElementById('threejs-wrapper').innerHTML = ''
@@ -35,7 +35,7 @@ export class Three {
     this.faceBoxes = []
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement)
-    this.controls.target.set( 0, 0, 0)
+    this.controls.target.set(0, 0, 0)
 
     this.importGLTFModelWithRigging('../Oldman 2/Oldman.glb')
     this.defaultHeadRotation = { x: 0, y: 0, z: 0 }
@@ -59,8 +59,8 @@ export class Three {
       (gltf) => {
         this.scene.add(gltf.scene)
         this.model = gltf.scene
-        
-        console.log("model :", this.model)
+
+        console.log('model :', this.model)
 
         this.saveDefaultRotation()
       },
@@ -138,11 +138,8 @@ export class Three {
 
   animateModel(face) {
     if (this.model) {
-      const keypoints = face.keypoints.map((keypoint) => [
-        keypoint.x,
-        keypoint.y,
-      ]);
-      const box = face.box;
+      const keypoints = face.keypoints.map((keypoint) => [keypoint.x, keypoint.y])
+      const box = face.box
 
       let topKeyPoint = face.keypoints[197];
       let bottomKeyPoint = face.keypoints[164];
@@ -178,26 +175,32 @@ export class Three {
       head.rotation.z = this.defaultHeadRotation.z + orientation.z;
 
       // jaw WIP
-      const jaw = this.model.getObjectByName("mandibula");
-      jaw.rotation.x =
-        this.defaultJawRotation.x +
-        (face.keypoints[13].y - face.keypoints[14].y) / 100;
+      const jaw = this.model.getObjectByName('mandibula')
+      jaw.rotation.x = this.defaultJawRotation.x + (face.keypoints[13].y - face.keypoints[14].y) / 100
 
       // left eyebrow
-      const leftEyebrow = this.model.getObjectByName("ceja_izq");
+      const leftEyebrow = this.model.getObjectByName('ceja_izq')
       leftEyebrow.rotation.z =
-        this.defaultLeftEyebrowRotation.z +
-        10 *
-          (0.16 + (face.keypoints[107].y - face.keypoints[245].y) / box.height);
-      //console.log(10 * (0.16 + ((face.keypoints[107].y - face.keypoints[245].y) / box.height)))
-      //console.log(box.height);
+        this.defaultLeftEyebrowRotation.z + 10 * (0.16 + (face.keypoints[107].y - face.keypoints[245].y) / box.height)
 
       // right eyebrow
-      const rightEyebrow = this.model.getObjectByName("ceja_der");
+      const rightEyebrow = this.model.getObjectByName('ceja_der')
       rightEyebrow.rotation.z =
-        this.defaultRightEyebrowRotation.z -
-        10 *
-          (0.16 + (face.keypoints[336].y - face.keypoints[465].y) / box.height);
+        this.defaultRightEyebrowRotation.z - 10 * (0.16 + (face.keypoints[336].y - face.keypoints[465].y) / box.height)
+
+      // left eye lid
+      const leftEyeLid = this.model.getObjectByName('parpado_up_izq')
+      leftEyeLid.rotation.x = Math.min(
+        this.defaultLeftEyeLidRotation.x,
+        this.defaultLeftEyeLidRotation.x - 50 * (0.05 + (face.keypoints[386].y - face.keypoints[374].y) / box.height)
+      )
+
+      // right eye lid
+      const rightEyeLid = this.model.getObjectByName('parpado_up_der')
+      rightEyeLid.rotation.x = Math.min(
+        this.defaultRightEyeLidRotation.x,
+        this.defaultRightEyeLidRotation.x - 50 * (0.05 + (face.keypoints[159].y - face.keypoints[145].y) / box.height)
+      )
     }
   }
 
@@ -211,9 +214,9 @@ export class Three {
     let bottomKeyPoint = face.keypoints[164]
 
     return {
-      x: - (topKeyPoint.z - bottomKeyPoint.z) / 100,
-      y: - (leftKeyPoint.z - rightKeyPoint.z) / 250,
-      z: - (topKeyPoint.x - bottomKeyPoint.x) / 100,
+      x: -(topKeyPoint.z - bottomKeyPoint.z) / 100,
+      y: -(leftKeyPoint.z - rightKeyPoint.z) / 250,
+      z: -(topKeyPoint.x - bottomKeyPoint.x) / 100,
     }
   }
 
@@ -242,6 +245,18 @@ export class Three {
       x: rightEyebrow.rotation.x,
       y: rightEyebrow.rotation.y,
       z: rightEyebrow.rotation.z,
+    }
+    const leftEyeLid = this.model.getObjectByName('parpado_up_izq')
+    this.defaultLeftEyeLidRotation = {
+      x: leftEyeLid.rotation.x,
+      y: leftEyeLid.rotation.y,
+      z: leftEyeLid.rotation.z,
+    }
+    const rightEyeLid = this.model.getObjectByName('parpado_up_der')
+    this.defaultRightEyeLidRotation = {
+      x: rightEyeLid.rotation.x,
+      y: rightEyeLid.rotation.y,
+      z: rightEyeLid.rotation.z,
     }
   }
 }
