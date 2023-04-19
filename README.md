@@ -13,9 +13,9 @@ Pour installer et lancer le projet, suivez les étapes ci-dessous :
 
 1. Clonez le dépôt GitHub sur votre machine locale :
 
-\```bash
+```bash
 git clone https://github.com/votre-nom-d-utilisateur/face-mocap.git
-\```
+```
 
 2. Accédez au dossier du projet :
 
