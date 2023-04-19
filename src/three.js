@@ -174,7 +174,7 @@ export class Three {
 
       // jaw WIP
       const jaw = this.model.getObjectByName('mandibula')
-      jaw.rotation.x = this.defaultJawRotation.x + (face.keypoints[13].y - face.keypoints[14].y) / 100
+      jaw.rotation.x = this.defaultJawRotation.x + (face.keypoints[13].y - face.keypoints[14].y) / 80
 
       // left eyebrow
       const leftEyebrow = this.model.getObjectByName('ceja_izq')
@@ -190,14 +190,14 @@ export class Three {
       const leftEyeLid = this.model.getObjectByName('parpado_up_izq')
       leftEyeLid.rotation.x = Math.min(
         this.defaultLeftEyeLidRotation.x,
-        this.defaultLeftEyeLidRotation.x - 50 * (0.05 + (face.keypoints[386].y - face.keypoints[374].y) / box.height)
+        this.defaultLeftEyeLidRotation.x - 50 * (0.05 + 3.5*(face.keypoints[386].y - face.keypoints[374].y) / box.height)
       )
 
       // right eye lid
       const rightEyeLid = this.model.getObjectByName('parpado_up_der')
       rightEyeLid.rotation.x = Math.min(
         this.defaultRightEyeLidRotation.x,
-        this.defaultRightEyeLidRotation.x - 50 * (0.05 + (face.keypoints[159].y - face.keypoints[145].y) / box.height)
+        this.defaultRightEyeLidRotation.x - 50 * (0.05 + 3.5*(face.keypoints[159].y - face.keypoints[145].y) / box.height)
       )
     }
   }
