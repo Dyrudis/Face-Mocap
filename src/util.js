@@ -48,8 +48,6 @@ async function resetBackend(backendName) {
  *      };
  * await setEnvFlags(flagConfig);
  *
- * console.log(tf.env().getBool('WEBGL_PACK')); // false
- * console.log(tf.env().getBool('WEBGL_PACK_BINARY_OPERATIONS')); // false
  * ```
  *
  * @param flagConfig An object to store flag-value pairs.

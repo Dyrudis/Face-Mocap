@@ -74,67 +74,7 @@ export class Three {
       }
     )
   }
-
-  importFBXModel(path) {
-    const loader = new FBXLoader()
-    loader.load(
-      path,
-      (fbx) => {
-        this.scene.add(fbx)
-        this.model = fbx
-        console.log(this.model)
-      },
-      (xhr) => {
-        console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
-        // position the camera
-        this.camera.position.z = 2
-      },
-      (error) => {
-        console.log('An error happened', error)
-      }
-    )
-  }
-
-  /**
-   * Draw the a path in the Three JS canvas.
-   * @param points A list of points to draw.
-   */
-  drawFaceBoxes(faces) {
-    // Remove previous face box
-    this.faceBoxes.forEach((line) => this.scene.remove(line))
-
-    faces.forEach((face) => {
-      const keypoints = face.keypoints.map((keypoint) => [keypoint.x, keypoint.y])
-
-      const box = face.box
-      box.xMin = box.xMin / SIZE.width - 0.5
-      box.xMax = box.xMax / SIZE.width - 0.5
-      box.yMin = -box.yMin / SIZE.height + 0.5
-      box.yMax = -box.yMax / SIZE.height + 0.5
-      let points = [
-        [box.xMin, box.yMin],
-        [box.xMax, box.yMin],
-        [box.xMax, box.yMax],
-        [box.xMin, box.yMax],
-      ]
-
-      points = points.map((point) => new THREE.Vector3(point[0], point[1], 0))
-
-      // First 3 edges
-      let material = new THREE.LineBasicMaterial({ color: 0x0000ff })
-      let geometry = new THREE.BufferGeometry().setFromPoints(points)
-      let line = new THREE.Line(geometry, material)
-      this.scene.add(line)
-      this.faceBoxes.push(line)
-
-      // Last edge
-      material = new THREE.LineBasicMaterial({ color: 0x0000ff })
-      geometry = new THREE.BufferGeometry().setFromPoints([points[0], points[points.length - 1]])
-      line = new THREE.Line(geometry, material)
-      this.scene.add(line)
-      this.faceBoxes.push(line)
-    })
-  }
+  
 
   animateModel(face) {
     if (this.model) {
@@ -147,7 +87,6 @@ export class Three {
       let scaler = 1
       this.model.scale.set(scale * scaler, scale * scaler, scale * scaler)
 
-      console.log(scale)
       // Head orientation
       const orientation = this.computeFaceOrientation(face)
       const head = this.model.getObjectByName('cabeza')
