@@ -35,7 +35,7 @@ npm install
 npm run dev
 ```
 
-Le projet devrait maintenant être accessible à l'adresse `http://localhost:3000` (ou à un autre port, si vous en avez spécifié un différent dans les configurations du projet).
+Le projet devrait maintenant être accessible à l'adresse `http://localhost:5173` (ou à un autre port, si vous en avez spécifié un différent dans les configurations du projet).
 
 ## Fonctionnalités
 
@@ -43,5 +43,5 @@ Le projet devrait maintenant être accessible à l'adresse `http://localhost:300
 - Affichage et animation d'un modèle 3D basé sur les données capturées
 - Interface utilisateur conviviale et facile à utiliser
 - Calibrage automatique pour différentes tailles de caméra
-- Compatibilité avec le logiciel Blender pour des animations faciales plus précises (not yet implemented)
+- Compatibilité avec le logiciel Blender pour des animations faciales plus précises (pas encore implémenté)
 
