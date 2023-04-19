@@ -53,9 +53,11 @@ export class Camera {
     canvasContainer.style = `width: ${videoWidth}px; height: ${videoHeight}px`
 
     // Because the image from camera is mirrored, need to flip horizontally.
-    const scale = Math.max(640 / camera.video.videoWidth, 480 / camera.video.videoHeight)
-    const translateX = ((camera.video.videoWidth * 640 / camera.video.videoWidth) + (camera.video.videoWidth * 480 / camera.video.videoHeight)) / 2
-    const translateY = 0
+   const scale = 1;
+
+   // Translate to the center of the canvas.
+   const translateX = (camera.video.videoWidth + 640) / 2;
+   const translateY = -(camera.video.videoHeight - 480) / 2;
 
     camera.ctx.translate(translateX, translateY)
     camera.ctx.scale(-scale, scale)

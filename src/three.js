@@ -144,7 +144,7 @@ export class Three {
       let bottomKeyPoint = face.keypoints[164]
       let x = box.xMin + (box.xMax - box.xMin) / 2
       let y = box.yMin + (box.yMax - box.yMin) / 2
-      this.model.position.set(-(x / SIZE.width) * 10 + 15, -(y / SIZE.height) * 7 + 5, -10)
+      this.model.position.set(-(x / SIZE.width) * 16 +8, -(y / SIZE.height) * 12 +4, -10)
       /* 
       let topKeyPointPosition = this.model.worldToLocal(
         new THREE.Vector3(
@@ -160,7 +160,7 @@ export class Three {
           0
         )
       ); */
-      let scale = 2 + ((box.xMax - box.xMin) + (box.yMax - box.yMin)) / 75
+      let scale = 2 + ((box.xMax - box.xMin) + (box.yMax - box.yMin)) / 35
       let scaler = 1
       this.model.scale.set(scale * scaler, scale * scaler, scale * scaler)
 
