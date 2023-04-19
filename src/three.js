@@ -139,27 +139,10 @@ export class Three {
   animateModel(face) {
     if (this.model) {
       const box = face.box
-
-      let topKeyPoint = face.keypoints[197]
-      let bottomKeyPoint = face.keypoints[164]
       let x = box.xMin + (box.xMax - box.xMin) / 2
       let y = box.yMin + (box.yMax - box.yMin) / 2
       this.model.position.set(-(x / SIZE.width) * 16 +8, -(y / SIZE.height) * 12 +4, -10)
-      /* 
-      let topKeyPointPosition = this.model.worldToLocal(
-        new THREE.Vector3(
-          (topKeyPoint.x / SIZE.width - 0.5) * 2,
-          -(topKeyPoint.y / SIZE.height - 0.5) * 2,
-          0
-        )
-      );
-      let bottomKeyPointPosition = this.model.worldToLocal(
-        new THREE.Vector3(
-          (bottomKeyPoint.x / SIZE.width - 0.5) * 2,
-          -(bottomKeyPoint.y / SIZE.height - 0.5) * 2,
-          0
-        )
-      ); */
+
       let scale = 2 + ((box.xMax - box.xMin) + (box.yMax - box.yMin)) / 35
       let scaler = 1
       this.model.scale.set(scale * scaler, scale * scaler, scale * scaler)
@@ -168,13 +151,13 @@ export class Three {
       // Head orientation
       const orientation = this.computeFaceOrientation(face)
       const head = this.model.getObjectByName('cabeza')
-      head.rotation.x = this.defaultHeadRotation.x + orientation.x
-      head.rotation.y = this.defaultHeadRotation.y + orientation.y
+      head.rotation.x = this.defaultHeadRotation.x + orientation.x*1.25
+      head.rotation.y = this.defaultHeadRotation.y + orientation.y*1.25
       head.rotation.z = this.defaultHeadRotation.z + orientation.z
 
       // jaw WIP
       const jaw = this.model.getObjectByName('mandibula')
-      jaw.rotation.x = this.defaultJawRotation.x + (face.keypoints[13].y - face.keypoints[14].y) / 80
+      jaw.rotation.x = this.defaultJawRotation.x + (face.keypoints[13].y - face.keypoints[14].y) / 100
 
       // left eyebrow
       const leftEyebrow = this.model.getObjectByName('ceja_izq')
@@ -190,14 +173,14 @@ export class Three {
       const leftEyeLid = this.model.getObjectByName('parpado_up_izq')
       leftEyeLid.rotation.x = Math.min(
         this.defaultLeftEyeLidRotation.x,
-        this.defaultLeftEyeLidRotation.x - 50 * (0.05 + 3.5*(face.keypoints[386].y - face.keypoints[374].y) / box.height)
+        this.defaultLeftEyeLidRotation.x - 50 * (0.05 + 3*(face.keypoints[386].y - face.keypoints[374].y) / box.height)
       )
 
       // right eye lid
       const rightEyeLid = this.model.getObjectByName('parpado_up_der')
       rightEyeLid.rotation.x = Math.min(
         this.defaultRightEyeLidRotation.x,
-        this.defaultRightEyeLidRotation.x - 50 * (0.05 + 3.5*(face.keypoints[159].y - face.keypoints[145].y) / box.height)
+        this.defaultRightEyeLidRotation.x - 50 * (0.05 + 3*(face.keypoints[159].y - face.keypoints[145].y) / box.height)
       )
     }
   }
