@@ -175,12 +175,20 @@ export class Three {
         this.defaultLeftEyeLidRotation.x,
         this.defaultLeftEyeLidRotation.x - 50 * (0.05 + 3*(face.keypoints[386].y - face.keypoints[374].y) / box.height)
       )
+      leftEyeLid.rotation.x = Math.max(
+        this.defaultLeftEyeLidRotation.x - 1.1,
+        leftEyeLid.rotation.x
+      )
 
       // right eye lid
       const rightEyeLid = this.model.getObjectByName('parpado_up_der')
       rightEyeLid.rotation.x = Math.min(
         this.defaultRightEyeLidRotation.x,
         this.defaultRightEyeLidRotation.x - 50 * (0.05 + 3*(face.keypoints[159].y - face.keypoints[145].y) / box.height)
+      )
+      rightEyeLid.rotation.x = Math.max(
+        this.defaultRightEyeLidRotation.x - 1.1,
+        rightEyeLid.rotation.x
       )
     }
   }
