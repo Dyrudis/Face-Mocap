@@ -1,9 +1,7 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { VIDEO_SIZE, STATE } from './params'
-import { copyModel } from '@tensorflow/tfjs-core/dist/io/model_management'
 
 const SIZE = VIDEO_SIZE[STATE.camera.sizeOption]
 
@@ -37,7 +35,7 @@ export class Three {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement)
     this.controls.target.set(0, 0, 0)
 
-    this.importGLTFModelWithRigging('../Oldman 2/Oldman.glb')
+    this.importGLTFModelWithRigging('../Model/Oldman.glb')
     this.defaultHeadRotation = { x: 0, y: 0, z: 0 }
 
     this.clock = new THREE.Clock()
